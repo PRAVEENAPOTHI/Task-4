@@ -1,0 +1,471 @@
+Code:
+import java.util.Scanner;
+
+class AgeNotWithinRangeException extends Exception {
+    public AgeNotWithinRangeException(String message) {
+        super(message);
+    }
+}
+
+class NameNotValidException extends Exception {
+    public NameNotValidException(String message) {
+        super(message);
+    }
+}
+
+class Student {
+    private int rollNo;
+    private String name;
+    private int age;
+    private String course;
+
+    public Student(int rollNo, String name, int age, String course) throws AgeNotWithinRangeException, NameNotValidException {
+        if (age < 15 || age > 21) {
+            throw new AgeNotWithinRangeException("Age should be between 15 and 21.");
+        }
+        if (!name.matches("^[a-zA-Z ]*$")) {
+            throw new NameNotValidException("Name should only have letters and spaces.");
+        }
+
+        this.rollNo = rollNo;
+        this.name = name;
+        this.age = age;
+        this.course = course;
+    }
+}
+
+public class Index {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter roll number: ");
+        int rollNo = scanner.nextInt();
+
+        System.out.print("Enter name: ");
+        scanner.nextLine(); 
+        String name = scanner.nextLine();
+
+        System.out.print("Enter age: ");
+        int age = scanner.nextInt();
+
+        System.out.print("Enter course: ");
+        scanner.nextLine(); 
+        String course = scanner.nextLine();
+
+        try {
+            Student student = new Student(rollNo, name, age, course);
+            System.out.println("Student created successfully.");
+        } catch (AgeNotWithinRangeException | NameNotValidException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            scanner.close();
+        }
+    }
+}
+
+
+Output 1:
+Enter roll number: 70
+Enter name: Praveena
+Enter age: 22
+Enter course: Java
+Error: Age should be between 15 and 21.
+
+Output 2:
+Enter roll number: 70
+Enter name: Pothi
+Enter age: 21
+Enter course: JFS
+Student created successfully.
+
+Output 3:
+Enter roll number: 70
+Enter name: Praveena90
+Enter age: 20
+Enter course: java
+Error: Name should only have letters and spaces.
+
+
+2)Code:
+import java.util.Scanner;
+
+class InvalidAgeException extends Exception {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
+}
+
+class Voter {
+    private int voterId;
+    private String name;
+    private int age;
+
+    public Voter(int voterId, String name, int age) throws InvalidAgeException {
+        if (age < 18) {
+            throw new InvalidAgeException("Invalid age for voter");
+        }
+        this.voterId = voterId;
+        this.name = name;
+        this.age = age;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter voter ID: ");
+        int voterId = scanner.nextInt();
+        System.out.print("Enter name: ");
+        String name = scanner.next();
+        System.out.print("Enter age: ");
+        int age = scanner.nextInt();
+
+        try {
+            Voter voter = new Voter(voterId, name, age);
+            System.out.println("Voter created successfully!");
+        } catch (InvalidAgeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
+
+
+Output 1:
+Enter voter ID: 456789
+Enter name: pothi
+Enter age: 22
+Voter created successfully!
+
+Output 2:
+Enter voter ID: 456789
+Enter name: pothi
+Enter age: 11
+Invalid age for voter
+
+
+3)Code:
+import java.util.Scanner;
+
+public class Weekdays {
+    public static void main(String[] args) {
+        String[] weekdays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            System.out.print("Enter the day position (0-6): ");
+            int dayIndex = scanner.nextInt();
+
+            if (dayIndex >= 0 && dayIndex <= 6) {
+                System.out.println("Day name: " + weekdays[dayIndex]);
+            } else {
+                System.out.println("Invalid day index. Please enter a number between 0 and 6.");
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Array index out of bounds. Please enter a valid day index.");
+        } catch (Exception e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+        } finally {
+            scanner.close();
+        }
+    }
+}
+
+Output1:
+
+Enter the day position (0-6): 6
+Day name: Saturday
+
+
+
+Output2:
+
+Enter the day position (0-6): 7
+Invalid day index. Please enter a number between 0 and 6.
+
+
+
+
+4)Code:
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class StudentGrades {
+    private static HashMap<String, Integer> studentGrades = new HashMap<>();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        boolean isRunning = true;
+
+        while (isRunning) {
+            System.out.println("Menu:");
+            System.out.println("1. Add Student");
+            System.out.println("2. Remove Student");
+            System.out.println("3. Display Student's Grade");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character after nextInt()
+
+            switch (choice) {
+                case 1:
+                    addStudent();
+                    break;
+                case 2:
+                    removeStudent();
+                    break;
+                case 3:
+                    displayStudentGrade();
+                    break;
+                case 4:
+                    isRunning = false;
+                    System.out.println("Exiting program. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        }
+
+        scanner.close();
+    }
+
+    private static void addStudent() {
+        System.out.print("Enter student name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter student grade: ");
+        int grade = scanner.nextInt();
+        studentGrades.put(name, grade);
+        System.out.println(name + "'s grade added successfully.");
+    }
+
+    private static void removeStudent() {
+        System.out.print("Enter student name to remove: ");
+        String name = scanner.nextLine();
+        if (studentGrades.containsKey(name)) {
+            studentGrades.remove(name);
+            System.out.println(name + "'s grade removed successfully.");
+        } else {
+            System.out.println("Student not found.");
+        }
+    }
+
+    private static void displayStudentGrade() {
+        System.out.print("Enter student name to display grade: ");
+        String name = scanner.nextLine();
+        if (studentGrades.containsKey(name)) {
+            int grade = studentGrades.get(name);
+            System.out.println(name + "'s grade: " + grade);
+        } else {
+            System.out.println("Student not found.");
+        }
+    }
+}
+
+Output:
+Menu:
+1. Add Student
+2. Remove Student
+3. Display Student's Grade
+4. Exit
+Enter your choice: 1
+Enter student name: Pothi
+Enter student grade: 9
+Pothi's grade added successfully.
+Menu:
+1. Add Student
+2. Remove Student
+3. Display Student's Grade
+4. Exit
+Enter your choice: 2
+Enter student name to remove: Pothi
+Pothi's grade removed successfully.
+Menu:
+1. Add Student
+2. Remove Student
+3. Display Student's Grade
+4. Exit
+Enter your choice: 1
+Enter student name: jim
+Enter student grade: 10
+jim's grade added successfully.
+Menu:
+1. Add Student
+2. Remove Student
+3. Display Student's Grade
+4. Exit
+Enter your choice: 3
+Enter student name to display grade: jim
+jim's grade: 10
+Menu:
+1. Add Student
+2. Remove Student
+3. Display Student's Grade
+4. Exit
+
+
+5)Code:
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Main {
+    private static Stack<Integer> stack = new Stack<>();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        boolean isRunning = true;
+
+        while (isRunning) {
+            System.out.println("Menu:");
+            System.out.println("1. Push element onto the stack");
+            System.out.println("2. Pop element from the stack");
+            System.out.println("3. Check if stack is empty");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    pushElement();
+                    break;
+                case 2:
+                    popElement();
+                    break;
+                case 3:
+                    checkEmpty();
+                    break;
+                case 4:
+                    isRunning = false;
+                    System.out.println("Exiting program. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        }
+
+        scanner.close();
+    }
+
+    private static void pushElement() {
+        System.out.print("Enter element to push onto the stack: ");
+        int element = scanner.nextInt();
+        stack.push(element);
+        System.out.println("Element " + element + " pushed onto the stack.");
+    }
+
+    private static void popElement() {
+        if (!stack.isEmpty()) {
+            int poppedElement = stack.pop();
+            System.out.println("Popped element: " + poppedElement);
+        } else {
+            System.out.println("Stack is empty. Cannot pop element.");
+        }
+    }
+
+    private static void checkEmpty() {
+        if (stack.isEmpty()) {
+            System.out.println("Stack is empty.");
+        } else {
+            System.out.println("Stack is not empty.");
+        }
+    }
+}
+
+
+Output:
+
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 89
+Invalid choice. Please try again.
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 1
+Enter element to push onto the stack: 0
+Element 0 pushed onto the stack.
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 2
+Popped element: 0
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 0
+Invalid choice. Please try again.
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 2
+Stack is empty. Cannot pop element.
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 1
+Enter element to push onto the stack: 8
+Element 8 pushed onto the stack.
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 1
+Enter element to push onto the stack: 56
+Element 56 pushed onto the stack.
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 2
+Popped element: 56
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 56
+Invalid choice. Please try again.
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 2
+Popped element: 8
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 3
+Stack is empty.
+Menu:
+1. Push element onto the stack
+2. Pop element from the stack
+3. Check if stack is empty
+4. Exit
+Enter your choice: 
+
+
+
+
+
+
+
